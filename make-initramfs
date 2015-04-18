@@ -1,0 +1,39 @@
+#!/bin/bash
+# Helper script for building initramfs
+# Copyright (C) 2015 Maciek Borzecki
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+usage() {
+    echo "Usage:"
+    echo "    $(basename $0) <source-dir> <output-file>"
+    echo ""
+    echo "Prepares a initramfs image from <source-dir>."
+    echo "Output file is gzip-compressed."
+}
+
+[ $# -eq 2 -o "$1" = "-h" -o "$1" == "--help" ] || {
+    usage
+    exit 1
+}
+
+outf=$(readlink -f $2)
+srcdir=$1
+compress="gzip -c"
+
+# remove output file
+rm -f $outf
+
+(
+    set -e
+    cd $srcdir
+    find . | cpio -o --format=newc | $compress > $outf
+)

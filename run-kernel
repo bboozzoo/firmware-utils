@@ -20,10 +20,13 @@ usage() {
     echo "Usage:"
     echo "    $(basename $0) <kernel> [<initramfs>] [-- <extra-opts>]"
     echo ""
-    echo "Run given kernel with optional initramfs under qemu. Parameters:"
+    echo "Run given kernel with optional initramfs under qemu."
+    echo "Parameters:"
     echo "   <kernel>     - Path to kernel binary"
     echo "   <initramfs>  - Path to inird/initramfs"
     echo "   <extra-opts> - Extra qemu options, passed verbatim"
+    echo "Environment variables:"
+    echo "   SYS          - qemu system emulator, defaults to x86_64"
 }
 
 SYS=${SYS:=x86_64}

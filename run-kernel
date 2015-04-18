@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# Helper script for running specific kernel and optional initramfs
+# under qemu. By default runs a x86_64 systemd, with console
+# redirected to stdio, no network, no display
+#
+# Copyright (C) 2015 Maciek Borzecki
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+usage() {
+    echo "Usage:"
+    echo "    $(basename $0) <kernel> [<initramfs>] [-- <extra-opts>]"
+    echo ""
+    echo "Run given kernel with optional initramfs under qemu. Parameters:"
+    echo "   <kernel>     - Path to kernel binary"
+    echo "   <initramfs>  - Path to inird/initramfs"
+    echo "   <extra-opts> - Extra qemu options, passed verbatim"
+}
+
+SYS=${SYS:=x86_64}
+
+if [ $# -lt 1 -o "$1" = "-h" -o "$1" == "--help" ]; then
+    usage
+    exit 1
+fi
+
+# grab the kernel path
+kernel=$1
+shift
+
+if [[  "$1" != "" && "$1" != '--' ]]; then
+   # might be a path to initramfs
+    initramfs=$1
+    shift
+
+    initrd_opt="-initrd $initramfs"
+fi
+
+# skip separator, leave the rest
+[ "$1" == '--' ] && shift
+
+qemu-system-${SYS} \
+            -kernel ${kernel} \
+            ${initrd_opt} \
+            -append 'console=ttyS0 rdinit=/sbin/init' \
+            -serial stdio \
+            -display none \
+            $*

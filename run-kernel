@@ -55,6 +55,5 @@ qemu-system-${SYS} \
             -kernel ${kernel} \
             ${initrd_opt} \
             -append 'console=ttyS0 rdinit=/sbin/init' \
-            -serial stdio \
-            -display none \
+            -nographic \
             $*

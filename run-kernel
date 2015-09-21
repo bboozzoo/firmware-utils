@@ -51,7 +51,7 @@ fi
 # skip separator, leave the rest
 [ "$1" == '--' ] && shift
 
-qemu-system-${SYS} \
+exec qemu-system-${SYS} \
             -kernel ${kernel} \
             ${initrd_opt} \
             -append 'console=ttyS0 rdinit=/sbin/init' \

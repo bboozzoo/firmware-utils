@@ -56,4 +56,5 @@ exec qemu-system-${SYS} \
             ${initrd_opt} \
             -append 'console=ttyS0 rdinit=/sbin/init' \
             -nographic \
+            -net nic -net user \
             $*

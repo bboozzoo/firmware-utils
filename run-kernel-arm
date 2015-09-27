@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Helper script for running specific kernel and optional initramfs
+# under qemu. By default runs an ARM Versatile Express A9 system, with
+# console redirected to stdio, no network, no display
+#
+# Copyright (C) 2015 Maciek Borzecki
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+SYS=arm
+MACHINE=${MACHINE:=vexpress-a9}
+CONSOLE=ttyAMA0
+QEMUARGS="-machine ${MACHINE}"
+
+export SYS QEMUARGS CONSOLE MACHINE
+run-kernel $*

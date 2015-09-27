@@ -27,9 +27,12 @@ usage() {
     echo "   <extra-opts> - Extra qemu options, passed verbatim"
     echo "Environment variables:"
     echo "   SYS          - qemu system emulator, defaults to x86_64"
+    echo "   QEMUARGS     - extra qemu arguments if not passed after --"
+    echo "   CONSOLE      - name of console port, defaults to ttyS0"
 }
 
 SYS=${SYS:=x86_64}
+CONSOLE=${CONSOLE:=ttyS0}
 
 if [ $# -lt 1 -o "$1" = "-h" -o "$1" == "--help" ]; then
     usage
@@ -54,7 +57,8 @@ fi
 exec qemu-system-${SYS} \
             -kernel ${kernel} \
             ${initrd_opt} \
-            -append 'console=ttyS0 rdinit=/sbin/init' \
+            -append "console=${CONSOLE} rdinit=/sbin/init" \
             -nographic \
             -net nic -net user \
+            ${QEMUARGS} \
             $*

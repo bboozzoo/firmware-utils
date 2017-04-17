@@ -61,4 +61,4 @@ exec qemu-system-${SYS} \
             -nographic \
             -net nic -net user \
             ${QEMUARGS} \
-            $*
+            "$@"
